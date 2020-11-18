@@ -1,20 +1,11 @@
 const express = require("express");
 const port = 3000;
-const path = require('path');
+const path = require("path");
 const mysql = require("mysql");
-const dotenv = require("dotenv");
+const db = require("./dbConnection");
 const cookieParser = require("cookie-parser");
 
-dotenv.config({path: "./.env"});
-
 const app = express();
-const db = mysql.createConnection({
-	host: process.env.DATABASE_HOST,
-	user: process.env.DATABASE_USER,
-	password: process.env.DATABASE_PASSWORD,
-	database: process.env.DATABASE,
-	port: process.env.DATABASE_PORT
-});
 
 db.connect((err, result) => {
 	if(err)
@@ -40,6 +31,8 @@ app.use(express.static(publicDirectory));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cookieParser());
+
+module.exports = db;
 
 //Define Routes
 app.use("/", require("./routes/pages"));
