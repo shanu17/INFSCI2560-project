@@ -22,14 +22,35 @@
 
 module.exports = function(app, passport) {
 
+	//Home page
 	app.get('/', function(req, res) {
-		res.render('index.ejs'); // load the index.ejs file
+		res.render('index', { user: req.user });
 	});
 
+	// app.get('/', isAuthenticated, function(req, res) {
+	// 	res.render('indexuser', { user: req.user });
+	// });
+
+	// function isAuthenticated(req, res, next) {
+	// 	if (req.isAuthenticated())
+	// 		return next();
+	// 	else{
+	// 		res.render('index.ejs')
+	// 	}
+	// }
+
 	//Login
-	app.get('/login', function(req, res) {
-		res.render('login.ejs', { message: req.flash('loginMessage') });
+	app.get('/login', isAuthLogin, function(req, res) {
+		res.redirect('/profile');
 	});
+
+	function isAuthLogin(req, res, next) {
+		if (req.isAuthenticated())
+			return next();
+		else{
+			res.render('login.ejs')
+		}
+	}
 
 	app.post('/login', passport.authenticate('local-login', {
             successRedirect : '/profile',
@@ -48,12 +69,20 @@ module.exports = function(app, passport) {
     });
 
 	//Sign up
-	app.get('/register', function(req, res) {
-		res.render('register.ejs', { message: req.flash('signupMessage') });
+	app.get('/register', isAuthReg, function(req, res) {
+		res.redirect('/sellerprofile');
 	});
 
+	function isAuthReg(req, res, next) {
+		if (req.isAuthenticated())
+			return next();
+		else{
+			res.render('register.ejs')
+		}
+	}
+
 	app.post('/register', passport.authenticate('local-signup', {
-		successRedirect : '/profile',
+		successRedirect : '/sellerprofile',
 		failureRedirect : '/register', // redirect back to the signup page if there is an error
 		failureFlash : true
 	}), (res,req) => {
@@ -61,9 +90,17 @@ module.exports = function(app, passport) {
 	});
 
 	//Sign up - Seller
-	app.get('/register_seller', function(req, res) {
-		res.render('register_seller.ejs', { message: req.flash('signupMessage_seller') });
+	app.get('/register_seller', isAuthRegSeller, function(req, res) {
+		res.redirect('/sellerprofile');
 	});
+
+	function isAuthRegSeller(req, res, next) {
+		if (req.isAuthenticated())
+			return next();
+		else{
+			res.render('register_seller.ejs')
+		}
+	}
 
 	app.post('/register', passport.authenticate('local-signup-seller', {
 		successRedirect : '/profile_seller',
@@ -76,6 +113,12 @@ module.exports = function(app, passport) {
 	//Profile
 	app.get('/profile', isLoggedIn, function(req, res) {
 		res.render('profile.ejs', {
+			user : req.user
+		});
+	});
+
+	app.get('/sellerprofile', isLoggedIn, function(req, res) {
+		res.render('sellerprofile.ejs', {
 			user : req.user
 		});
 	});
@@ -94,8 +137,9 @@ module.exports = function(app, passport) {
 
 // route middleware
 function isLoggedIn(req, res, next) {
-	// if user is authenticated in the session-
 	if (req.isAuthenticated())
 		return next();
-	res.redirect('/');
+	else {
+		res.redirect('/');
+	}
 }
