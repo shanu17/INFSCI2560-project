@@ -1,14 +1,24 @@
-const mysql = require("mysql");
-const dotenv = require("dotenv");
+// const mysql = require("mysql");
+// const dotenv = require("dotenv");
 
-dotenv.config({path: "./.env"});
+// dotenv.config({path: "./.env"});
 
-const db = mysql.createConnection({
-	host: process.env.DATABASE_HOST,
-	user: process.env.DATABASE_USER,
-	password: process.env.DATABASE_PASSWORD,
-	database: process.env.DATABASE,
-	port: process.env.DATABASE_PORT
-});
+// const db = mysql.createConnection({
+// 	host: process.env.DATABASE_HOST,
+// 	user: process.env.DATABASE_USER,
+// 	password: process.env.DATABASE_PASSWORD,
+// 	database: process.env.DATABASE,
+// 	port: process.env.DATABASE_PORT
+// });
 
-module.exports = db;
+// module.exports = db;
+
+module.exports = {
+    'connection': {
+        'host': 'localhost',
+        'user': 'root',
+        'password': 'sanil2502'
+    },
+	'database': 'foodapp3',
+    'users_table': 'users'
+};
