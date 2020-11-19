@@ -56,7 +56,9 @@ module.exports = function(app, passport) {
 		successRedirect : '/profile',
 		failureRedirect : '/register', // redirect back to the signup page if there is an error
 		failureFlash : true
-	}));
+	}), (res,req) => {
+		console.log("success")
+	});
 
 	//Profile
 	app.get('/profile', isLoggedIn, function(req, res) {

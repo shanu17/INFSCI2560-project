@@ -4,9 +4,9 @@ var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 const dbconfig = require("./dbConnection");
 var connection = mysql.createConnection(dbconfig.connection);
-connection.connect();
+// connection.connect();
 connection.query('USE ' + dbconfig.database);
-connection.end();
+// connection.end();
 
 
 module.exports = function(passport) {
@@ -18,11 +18,11 @@ module.exports = function(passport) {
 
     //Deserialize the user
     passport.deserializeUser(function(id, done) {
-        connection.connect();
+        // connection.connect();
         connection.query("SELECT * FROM users WHERE id = ? ",[id], function(err, rows){
             done(err, rows[0]);
         });
-        connection.end();
+        // connection.end();
     });
 
 
@@ -30,13 +30,13 @@ module.exports = function(passport) {
     passport.use(
         'local-signup',
         new LocalStrategy({
-            emailField : 'email',
+            usernameField : 'email',
             passwordField : 'password',
             passReqToCallback : true
         },
         function(req, email, password, done) {
             //Check if user exists
-            connection.connect();
+            // connection.connect();
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
                 if (err)
                     return done(err);
@@ -50,15 +50,15 @@ module.exports = function(passport) {
                     };
 
                     var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
-                    connection.connect();
+                    // connection.connect();
                     connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
                         newUserMysql.id = rows.insertId;
                         return done(null, newUserMysql);
                     });
-                    connection.end();
+                    // connection.end();
                 }
             });
-            connection.end();
+            // connection.end();
         })
     );
 
@@ -67,12 +67,12 @@ module.exports = function(passport) {
     passport.use(
         'local-login',
         new LocalStrategy({
-            emailField : 'email',
+            usernameField : 'email',
             passwordField : 'password',
             passReqToCallback : true
         },
         function(req, email, password, done) {
-            connection.connect();
+            // connection.connect();
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows){
                 if (err)
                     return done(err);
@@ -87,7 +87,7 @@ module.exports = function(passport) {
                 //return the user
                 return done(null, rows[0]);
             });
-            connection.end();
+            // connection.end();
         })
     );
 };
