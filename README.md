@@ -13,7 +13,7 @@ Passport authentication -
 
 ## DB Schema:
 
-User (id, email, name, password, address), 
+User (id, email, name, password, address),
 customer (user_id, customer_id, profile_img), 
 Restaurant (seller) (user_id, rest_id, category), 
 menu (id, rest_id, title, summary, item_id),
