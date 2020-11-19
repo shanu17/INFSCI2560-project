@@ -62,6 +62,42 @@ module.exports = function(passport) {
         })
     );
 
+    //Sign up - Seller
+    passport.use(
+        'local-signup-seller',
+        new LocalStrategy({
+            usernameField : 'email',
+            passwordField : 'password',
+            passReqToCallback : true
+        },
+        function(req, email, password, done) {
+            //Check if user exists
+            // connection.connect();
+            connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
+                if (err)
+                    return done(err);
+                if (rows.length) {
+                    return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                } else {
+                    // If user does not exist, create the user
+                    var newUserMysql = {
+                        email: email,
+                        password: bcrypt.hashSync(password, null, null)
+                    };
+
+                    var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
+                    // connection.connect();
+                    connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
+                        newUserMysql.id = rows.insertId;
+                        return done(null, newUserMysql);
+                    });
+                    // connection.end();
+                }
+            });
+            // connection.end();
+        })
+    );
+
 
     //Login
     passport.use(

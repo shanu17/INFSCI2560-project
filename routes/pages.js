@@ -60,6 +60,19 @@ module.exports = function(app, passport) {
 		console.log("success")
 	});
 
+	//Sign up - Seller
+	app.get('/register_seller', function(req, res) {
+		res.render('register_seller.ejs', { message: req.flash('signupMessage_seller') });
+	});
+
+	app.post('/register', passport.authenticate('local-signup-seller', {
+		successRedirect : '/profile_seller',
+		failureRedirect : '/register_seller', // redirect back to the signup page if there is an error
+		failureFlash : true
+	}), (res,req) => {
+		console.log("success")
+	});
+	
 	//Profile
 	app.get('/profile', isLoggedIn, function(req, res) {
 		res.render('profile.ejs', {
