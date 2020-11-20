@@ -35,6 +35,7 @@ module.exports = function(passport) {
             passReqToCallback : true
         },
         function(req, email, password, done) {
+            console.log("func")
             //Check if user exists
             // connection.connect();
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
@@ -45,14 +46,22 @@ module.exports = function(passport) {
                 } else {
                     // If user does not exist, create the user
                     var newUserMysql = {
+                        // id: 
                         email: email,
                         password: bcrypt.hashSync(password, null, null)
                     };
 
                     var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
                     // connection.connect();
+                    // connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
+                        
                     connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
                         newUserMysql.id = rows.insertId;
+                        if (err) {
+                            console.log(err)
+                        }
+                        console.log(rows.insertId)
+
                         return done(null, newUserMysql);
                     });
                     // connection.end();
