@@ -1,3 +1,5 @@
+const db = require("../dbConnection");
+
 module.exports = function(app, passport) {
 
 	//Home page
@@ -83,10 +85,33 @@ module.exports = function(app, passport) {
 
 	//Profile
 	app.get('/profile', isLoggedIn, function(req, res) {
-		console.log(req.user)
-		res.render('profile.ejs', {
-			user : req.user
+		let query = "SELECT * FROM users u NATURAL JOIN customer c WHERE c.user_id = ?";
+		db.query(query, [req.user.id], (err, row) => {
+			if(err)
+				console.log(err);
+			if(row.length) {
+				res.render("profile.ejs", {user: req.user, isCustomer: true, status: false});
+			} else {
+				res.render("profile.ejs", {user: req.user, isCustomer: false, status: false})
+			}
+		});
+	});
 
+	app.post("/profile/addItem", isLoggedIn, (req, res) => {
+		let dishImg = req.files.dishimg1;
+		let dishName = req.body.dish1;
+		let dishPrice = req.body.dishprice1;
+		var query = "SELECT m.id FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = ?) x NATURAL JOIN menu m"
+		dishImg.mv("./uploads/" + dishImg.name);
+		db.query(query, [req.user.id], (err, row) => {
+			if(err)
+				console.log(err);
+			query = "INSERT INTO items (menu_id, name, summary, type, price) VALUES (?,?,?,?,?)";
+			db.query(query, [row[0].id, dishName, dishImg.name, "burger", dishPrice], (err, row) => {
+				if(err)
+					console.log(err);
+				res.send({status: true});
+			})
 		});
 	});
 

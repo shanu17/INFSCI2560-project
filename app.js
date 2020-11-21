@@ -3,6 +3,8 @@ const port = 3000;
 const path = require("path");
 const mysql = require("mysql");
 const db = require("./dbConnection");
+const cors = require("cors");
+const fileUpload = require('express-fileupload');
 var session  = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -49,7 +51,10 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json());
-
+app.use(cors());
+app.use(fileUpload({
+    createParentPath: true
+}));
 
 app.use(session({
 	secret: 'sanil25',
