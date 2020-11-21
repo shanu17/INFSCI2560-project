@@ -4,17 +4,61 @@
         <title>Restaurant</title>
         <meta name="description" content="This is the description">
         <link rel="stylesheet" href="/css/styles_cart.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
         <script src="cart.js"></script>
+
+
+        <!-- <link rel="stylesheet" type="text/css" href="/css/custom.css"> -->
+        <!-- <link rel="stylesheet" type="text/css" href="/css/style.css"> -->
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+        <!-- <script src="js/bootsnav.js" defer></script>
+        <script src="js/main.js" defer></script> -->
+    
+
+
     </head>
     <body>
-        <header class="main-header">
-            <nav class="main-nav nav">
+            <!-- <nav class="main-nav nav">
                 <ul>
                     <li><a href="index.html">HOME</a></li>
                     <li><a href="store.html">STORE</a></li>
                     <li><a href="about.html">ABOUT</a></li>
                 </ul>
-            </nav>
+            </nav> -->
+            <!-- Top Nav -->
+	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+		<a class="navbar-brand" href="#"><b>Food Express</b></a>
+		<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="true">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div id="navb" class="navbar-collapse collapse hide">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" href="/">HOME</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">ABOUT US</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#footer">CONTACT US</a>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="/register"><span class="fas fa-user"></span> Sign Up</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/login"><span class="fas fa-sign-in-alt"></span> Login</a>
+				</li>
+			</ul>
+		  </div>
+    </nav>
+        <header class="main-header">
             <h1 class="band-name band-name-large">Restaurant xyz</h1>
         </header>
         <section class="container content-section">
@@ -90,27 +134,47 @@
             </div>
             <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
         </section>
-        <!-- <footer class="main-footer">
-            <div class="container main-footer-container">
-                <h3 class="band-name">The Generics</h3>
-                <ul class="nav footer-nav">
-                    <li>
-                        <a href="https://www.youtube.com" target="_blank">
-                            <img src="Images/YouTube Logo.png">
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.spotify.com" target="_blank">
-                            <img src="Images/Spotify Logo.png">
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.facebook.com" target="_blank">
-                            <img src="Images/Facebook Logo.png">
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </footer> -->
+        <!-- Footer -->
+	<footer id="footer">
+		<!-- <div class="container">
+			<div class="row">
+				<div class="col-lg-5 col-sm-4 col-xs-12 pull-right">
+					<div class="basic_info">
+						<a href=""><img class="footer_logo" src="images/ClipartKey_1633604.png" alt="Food Express" /></a>
+					</div>
+				</div>                 
+				<div class="col-lg-4 col-sm-4 col-xs-12 col-lg-offset-1 pull-right">
+					<div class="contact_us">
+						<h3 style="color: white;">Contact Us</h3>
+						<a href="">info@foodexpress.com</a>
+						<address>
+							Walnut Street, Pittsburgh<br />
+							PA 15221 <br />
+							USA <br />
+						</address>
+					</div>
+				</div>
+				<div class="col-lg-3 col-sm-4 col-xs-12 col-lg-offset-1 pull-right">
+					<div class="subscribe">
+						<h3 style="color: white;">Subscribe now</h3>
+						<p>Subscribe to the newsletter and get some crispy stuff every week.</p>
+						<form role="form">
+							<div class="form-group">
+								<div class="input-group">
+									<input type="email" class="form-control" id="em" placeholder="Enter your e-mail here">
+									<span class="input-group-btn">
+										<button type="submit" class="btn send_btn">
+											<i class="glyphicon glyphicon-send"></i>
+										</button>
+									</span>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer> -->
+
     </body>
 </html>
