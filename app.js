@@ -3,8 +3,17 @@ const port = 3000;
 const path = require("path");
 const mysql = require("mysql");
 const db = require("./dbConnection");
+var session  = require('express-session');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var passport = require('passport');
+var flash    = require('connect-flash');
 
 const app = express();
+const publicDirectory = path.join(__dirname, "./public");
+app.use(express.static('views'));
+app.use(express.static(publicDirectory));
 
 db.connect((err, result) => {
 	if(err)
@@ -12,7 +21,7 @@ db.connect((err, result) => {
 	else {
 		console.log("Connected to MySQL");
 		var sql = [];
-		sql.push("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(255) NOT NULL)");
+		sql.push("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(100) NOT NULL, password VARCHAR(255) NOT NULL, address VARCHAR(255) NOT NULL)");
 		sql.push("CREATE TABLE seller (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, category VARCHAR(255) NOT NULL, CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)");
 		sql.push("CREATE TABLE customer (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, profile_img VARCHAR(255), CONSTRAINT fk_users_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)");
 		sql.push("CREATE TABLE menu (id INT AUTO_INCREMENT PRIMARY KEY, rest_id INT NOT NULL, title VARCHAR(255) NOT NULL, summary VARCHAR(255), CONSTRAINT fk_rest_id FOREIGN KEY (rest_id) REFERENCES seller (id) ON DELETE CASCADE)");
@@ -30,20 +39,39 @@ db.connect((err, result) => {
 	}
 });
 
+require('./passport')(passport);
+
 app.set("view engine", "ejs");
 app.engine("ejs", require("ejs").__express);
-const publicDirectory = path.join(__dirname, "./public");
-app.use(express.static('views'));
-app.use(express.static(publicDirectory));
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
+app.use(bodyParser.json());
 
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
 
-module.exports = db;
+app.use(session({
+	secret: 'sanil25',
+	resave: true,
+	saveUninitialized: true
+ } )); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash());
+
+//Routes
+require('./routes/pages.js')(app, passport);
+
+// app.use(express.urlencoded({extended: false}));
+// app.use(express.json());
+
+// module.exports = db;
 
 //Define Routes
-app.use("/", require("./routes/pages"));
-app.use("/auth", require("./routes/auth"));
+// app.use("/", require("./routes/pages"));
+// app.use("/auth", require("./routes/auth"));
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
