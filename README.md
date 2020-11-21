@@ -2,14 +2,12 @@
 A food ordering platform for INFSCI2560 Project
 
 
+## References:
 
-
-
-References:
-
-Carousel - https://getbootstrap.com/docs/4.0/components/carousel/
+Carousel, Forms, Buttons, Navigation bar - https://getbootstrap.com/docs/4.0/components
 Cart/Store page - https://youtu.be/YeFzkC2awTM
-Passport authentication - 
+Passport authentication - https://github.com/manjeshpv/node-express-passport-mysql
+Login/Signup page - https://epicbootstrap.com/snippets/registration
 
 ## DB Schema:
 
