@@ -121,7 +121,7 @@ module.exports = function(app, passport) {
 		let dishName = req.body.dish1;
 		let dishPrice = req.body.dishprice1;
 		var query = "SELECT m.id FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = ?) x NATURAL JOIN menu m";
-		dishImg.mv("./uploads/" + dishImg.name);
+		dishImg.mv("./public/uploads/" + dishImg.name);
 		db.query(query, [req.user.id], (err, row) => {
 			if(err)
 				console.log(err);
@@ -176,18 +176,19 @@ module.exports = function(app, passport) {
 // 	});
 
 	//Restaurant page render
-	app.get("/restaurant/:id", (req, res) => {
-		// let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
-		// let query = "SELECT * FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = 1) x NATURAL JOIN menu m";
-		// db.query(query, (err, row) => {
-		// 	console.log(row)
-		// 	if(err)
-		// 		console.log(err);
-		// 	if(row.length) {
-				res.render("restaurant.ejs", {menu: row, rest: row, status: false});
-		// 	} else {
-		// 		res.redirect('/')
-		// 	}
-		// });
-	})
+	app.get("/restaurant/:id", isLoggedIn,(req, res) => {
+		let restId = req.params.id; 
+		let query = "SELECT i.id, name, price, summary FROM (SELECT m.id FROM menu m INNER JOIN seller s ON s.id = m.rest_id WHERE s.id = ?) x INNER JOIN items i ON i.menu_id = x.id";
+		db.query(query, [restId], (err, row) => {
+			if(err)
+				console.log(err);
+			else
+				console.log(row);
+			if(row.length) {
+				res.render("restaurant.ejs", {user: req.user, data: row});
+			} else {
+				res.redirect("/");
+			}
+		});
+	});
 };
