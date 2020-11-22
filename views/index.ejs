@@ -129,12 +129,16 @@
 			    <div class=" carousel-item active text-center">
 					<% for (var i = 0; i < rest.length; i++) { %>
 			      <figure class="col-md-2 d-md-inline-block">
-					<% if(user){ %> 
-					<a href="">
-						<% } %>
-							<p><%= rest[i]['name'] %></p>
-				          <!-- <img src="images/subwaylogo.png" width="auto" height="100" style="border-radius: 25px;" > -->
-				        </a>
+					<% if(user){ %>
+						<% let act = "/restaurant/" + rest[i]['id']; console.log(act) %>
+						<a href="<%= act %>">
+						<!-- <a href="<%=//rest[i]['name'] %>"> -->
+					<% } else { %> 
+						<a href="/login">
+					<% } %>
+					<p><%= rest[i]['name'] %></p>
+					<!-- <img src="images/subwaylogo.png" width="auto" height="100" style="border-radius: 25px;" > -->
+						</a>
 				  </figure>
 				  <% } %>
 				</div>

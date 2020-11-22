@@ -6,7 +6,7 @@ module.exports = function(app, passport) {
 	app.get('/', function(req, res) {
 		let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
 		db.query(query, (err, row) => {
-			console.log(row[0]['name'])
+			console.log(row[0]['id'])
 			if(err)
 				console.log(err);
 			if(row.length) {
@@ -162,16 +162,32 @@ module.exports = function(app, passport) {
 	});
 
 	//Cart render
-	app.get("/restaurant", (req, res) => {
-		let query = "SELECT * FROM users u NATURAL JOIN customer c WHERE c.user_id = ?";
-		db.query(query, [req.user.id], (err, row) => {
+// 	app.get("/restaurant", (req, res) => {
+// 		let query = "SELECT * FROM users u NATURAL JOIN customer c WHERE c.user_id = ?";
+// 		db.query(query, [req.user.id], (err, row) => {
+// 			if(err)
+// 				console.log(err);
+// 			if(row.length) {
+// 				res.render("restaurant.ejs", {user: req.user, isCustomer: true, status: false});
+// 			} else {
+// 				res.render("restaurant.ejs", {user: req.user, isCustomer: false, status: false})
+// 			}
+// 		});
+// 	});
+
+	app.get("/restaurant/:id", (req, res) => {
+		// let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
+		let query = "SELECT * FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = 1) x NATURAL JOIN menu m";
+		db.query(query, (err, row) => {
 			if(err)
 				console.log(err);
 			if(row.length) {
-				res.render("restaurant.ejs", {user: req.user, isCustomer: true, status: false});
+				res.render("restaurant.ejs", {menu: row, rest: row, status: false});
 			} else {
-				res.render("restaurant.ejs", {user: req.user, isCustomer: false, status: false})
+				res.render("index.ejs", {user: req.user, isCustomer: true, status: false})
 			}
 		});
-	});
+	})
 };
+
+	
