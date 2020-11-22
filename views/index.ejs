@@ -133,9 +133,10 @@
 					<% for (var i = 0; i < rest.length; i++) { %>
 			      <figure class="col-md-2 d-md-inline-block">
 					<% if(user){ %>
-						<% let act = "/restaurant/" + rest[i]['id']; console.log(act) %>
+						<% let act = "/restaurant/" + rest[i]['id'] %>
 						<a href="<%= act %>">
-						<!-- <a href="<%=//rest[i]['name'] %>"> -->
+							<% let icon = "images/homeicons/" + rest[i]['id'] + ".jpg" %>
+						<img src="<%= icon %>" width="auto" height="auto" style="border-radius: 25px;" >
 					<% } else { %> 
 						<a href="/login">
 					<% } %>

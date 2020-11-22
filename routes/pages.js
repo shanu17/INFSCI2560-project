@@ -4,12 +4,12 @@ module.exports = function(app, passport) {
 
 	//Home page
 	app.get('/', function(req, res) {
+		
 		let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
 		db.query(query, (err, row) => {
-			console.log(row[0]['id'])
 			if(err)
 				console.log(err);
-			if(row.length) {
+			if(row.length) { //If Seller
 				res.render("index.ejs", {user: req.user, rest: row, isCustomer: false, status: false});
 			} else {
 				res.render("index.ejs", {user: req.user, isCustomer: true, status: false})
