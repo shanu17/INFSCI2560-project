@@ -18,4 +18,4 @@ menuItemsForm.addEventListener("submit", (e) => {
 	let url = "http://localhost:3000/profile/addItem";
 	req.open("POST", url, true);
 	req.send(formData);
-})
+});

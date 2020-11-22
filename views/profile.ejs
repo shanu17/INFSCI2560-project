@@ -52,18 +52,34 @@
 					<h3><span class="fa fa-user"></span> User Name</h3>
 						<p>
 							<strong>Email ID</strong>: <%= user.email %><br>
-							<strong>Phone</strong>: <%= user.phone %><br>
+							<strong>Name</strong>: <%= user.name %><br>
 							<strong>Address</strong>: <%= user.address %><br>
 						</p>
 				</div>
 			</div>
 		</div>
 		<button type="button" class="btn btn-danger" onclick="window.location='/logout';">Logout</button>
-			<% if(!isCustomer){ %> 
+			<% if(!isCustomer){ %>
+				<% if (typeof(existingMenuItems) !="undefined") {%>
+					<h1>Menu Items</h1>
+					<% for(var i=0; i<existingMenuItems.length; i++) { %>
+						<div class="form-row">
+						<div class="form-group">
+						<% let act = "/profile/removeItems/" + existingMenuItems[i].id %>
+						<form action = <%= act%> method="GET" id = <%= existingMenuItems[i].id%>>
+							<div class="form-group">
+								<%= existingMenuItems[i].name %>
+								<button type="submit" class="btn btn-primary create-account">Delete Item</button>
+							</div>
+						</form>
+						</div>
+						</div>
+					<%} %>
+				<% } %>
 			<div class="form-row">
 				<h1 class="display-4" style="color: black; text-align: center;" >Create your Menu Here</h1>
 				<form action="/register_seller" method="POST" id="menuItems">
-					<h3 style="color: black; text-align: center;" >Please add the dishes with prices for your restaurant</h1>
+					<h3 style="color: black; text-align: center;" >Please add the dishes with prices for your restaurant</h3>
 					<div class="input-group">
 						<input type="text" class="form-control" id="dish1" name="dish1" placeholder="Dish #1">
 						<input type="text" class="form-control" id="dishprice1" name="dishprice1" placeholder="Price ($)">

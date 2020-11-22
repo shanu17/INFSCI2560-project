@@ -100,9 +100,19 @@ module.exports = function(app, passport) {
 			if(err)
 				console.log(err);
 			if(row.length) {
-				res.render("profile.ejs", {user: req.user, isCustomer: true, status: false});
+				res.render("profile.ejs", {user: req.user, isCustomer: true, status: true});
 			} else {
-				res.render("profile.ejs", {user: req.user, isCustomer: false, status: false})
+				query = "SELECT i.id, name, price FROM (SELECT m.id FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = ?) x NATURAL JOIN menu m) x INNER JOIN items i ON x.id = i.menu_id";
+				db.query(query, [req.user.id], (err, row) => {
+					if(err)
+						console.log(err);
+					if(row.length) {
+						console.log(row);
+						res.render("profile.ejs", {user: req.user, isCustomer: false, status: false, existingMenuItems: row});
+					}
+					else
+						res.render("profile.ejs", {user: req.user, isCustomer: false, status: false});
+				});
 			}
 		});
 	});
@@ -111,7 +121,7 @@ module.exports = function(app, passport) {
 		let dishImg = req.files.dishimg1;
 		let dishName = req.body.dish1;
 		let dishPrice = req.body.dishprice1;
-		var query = "SELECT m.id FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = ?) x NATURAL JOIN menu m"
+		var query = "SELECT m.id FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = ?) x NATURAL JOIN menu m";
 		dishImg.mv("./uploads/" + dishImg.name);
 		db.query(query, [req.user.id], (err, row) => {
 			if(err)
@@ -125,11 +135,16 @@ module.exports = function(app, passport) {
 		});
 	});
 
-	// app.get('/sellerprofile', isLoggedIn, function(req, res) {
-	// 	res.render('sellerprofile.ejs', {
-	// 		user : req.user
-	// 	});
-	// });
+	app.get("/profile/removeItems/:id", isLoggedIn, (req, res) => {
+		let itemId = req.params.id;
+		var query = "DELETE FROM items where id = ?";
+		db.query(query, [itemId], (err, row) => {
+			if(err)
+				console.log(err);
+			else
+				res.redirect("/profile");
+		})
+	});
 
 	function isLoggedIn(req, res, next) {
 		if (req.isAuthenticated())
