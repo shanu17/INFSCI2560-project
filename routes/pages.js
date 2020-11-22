@@ -128,6 +128,7 @@ module.exports = function(app, passport) {
 				console.log(err);
 			query = "INSERT INTO items (menu_id, name, summary, type, price) VALUES (?,?,?,?,?)";
 			db.query(query, [row[0].id, dishName, dishImg.name, "burger", dishPrice], (err, row) => {
+				console.log(row)
 				if(err)
 					console.log(err);
 				res.send({status: true});
@@ -175,6 +176,7 @@ module.exports = function(app, passport) {
 // 		});
 // 	});
 
+	//Restaurant page render
 	app.get("/restaurant/:id", (req, res) => {
 		// let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
 		let query = "SELECT * FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = 1) x NATURAL JOIN menu m";
@@ -184,10 +186,8 @@ module.exports = function(app, passport) {
 			if(row.length) {
 				res.render("restaurant.ejs", {menu: row, rest: row, status: false});
 			} else {
-				res.render("index.ejs", {user: req.user, isCustomer: true, status: false})
+				res.redirect('/')
 			}
 		});
 	})
 };
-
-	
