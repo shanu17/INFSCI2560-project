@@ -4,7 +4,17 @@ module.exports = function(app, passport) {
 
 	//Home page
 	app.get('/', function(req, res) {
-		res.render('index', { user: req.user });
+		let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
+		db.query(query, (err, row) => {
+			console.log(row[0]['name'])
+			if(err)
+				console.log(err);
+			if(row.length) {
+				res.render("index.ejs", {user: req.user, rest: row, isCustomer: false, status: false});
+			} else {
+				res.render("index.ejs", {user: req.user, isCustomer: true, status: false})
+			}
+		});
 	});
 
 	//Login
@@ -137,7 +147,16 @@ module.exports = function(app, passport) {
 	});
 
 	//Cart render
-	app.get("/cart", (req, res) => {
-		res.render("cart");
+	app.get("/restaurant", (req, res) => {
+		let query = "SELECT * FROM users u NATURAL JOIN customer c WHERE c.user_id = ?";
+		db.query(query, [req.user.id], (err, row) => {
+			if(err)
+				console.log(err);
+			if(row.length) {
+				res.render("restaurant.ejs", {user: req.user, isCustomer: true, status: false});
+			} else {
+				res.render("restaurant.ejs", {user: req.user, isCustomer: false, status: false})
+			}
+		});
 	});
 };

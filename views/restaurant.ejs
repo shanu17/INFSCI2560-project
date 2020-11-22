@@ -59,7 +59,11 @@
 		  </div>
     </nav>
         <header class="main-header">
-            <h1 class="band-name band-name-large">Restaurant xyz</h1>
+            <h1 class="band-name band-name-large"><%= user.name %></h1>
+            <!-- <% if(!isCustomer){ %> 
+                <% if(!isCustomer){ %> 
+                <h2>Please go to your profile to make changes to your restaurant</h2>
+            <% } %> -->
         </header>
         <section class="container content-section">
             <h2 class="section-header">Food Items</h2>

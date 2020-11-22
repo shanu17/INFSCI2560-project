@@ -127,12 +127,19 @@
 		    <div id="mdb-lightbox-ui"></div>
 			    <!--First slide-->
 			    <div class=" carousel-item active text-center">
+					<% for (var i = 0; i < rest.length; i++) { %>
 			      <figure class="col-md-2 d-md-inline-block">
-				        <a href="">
-				          <img src="images/subwaylogo.png" width="auto" height="100" style="border-radius: 25px;" >
+					<% if(user){ %> 
+					<a href="">
+						<% } %>
+							<p><%= rest[i]['name'] %></p>
+				          <!-- <img src="images/subwaylogo.png" width="auto" height="100" style="border-radius: 25px;" > -->
 				        </a>
-			      </figure>
-			      <figure class="col-md-2 d-md-inline-block">
+				  </figure>
+				  <% } %>
+				</div>
+		  </div>
+			      <!-- <figure class="col-md-2 d-md-inline-block">
 				        <a href="">
 				          <img src="images/Chick-fil.jpg" width="auto" height="100" style="border-radius: 25px;">
 				        </a>
@@ -152,12 +159,12 @@
 				          <img src="images/cs_logo.png"
 				            width="350" height="100" style="border-radius: 25px;">
 				        </a>
-			      </figure>  
+			      </figure>   -->
 			    </div>
 			    <!--/.First slide-->
 
 			    <!--Second slide-->
-			    <div class="carousel-item text-center">
+			    <!-- <div class="carousel-item text-center">
 			     <figure class="col-md-2 d-md-inline-block">
 				        <a href="">
 				          <img src="images/MD_logo.jpg"
@@ -188,12 +195,9 @@
 				            width="300" height="100"  style="border-radius: 25px;">
 				        </a>
 			      </figure>
-			    </div>
+			    </div> -->
 			    <!--/.Second slide-->
-		  </div>
 		  <!--/.Slides-->
-
-		</div>
 		<!--/.Carousel Wrapper-->
 
 		<!--Controls-->
