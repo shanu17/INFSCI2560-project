@@ -25,7 +25,7 @@ module.exports = function(app, passport) {
 		if (req.isAuthenticated())
 			return next();
 		else{
-			res.render('login.ejs')
+			res.render('login.ejs', { message: req.flash('loginMessage')});
 		}
 	}
 
@@ -55,7 +55,7 @@ module.exports = function(app, passport) {
 		if (req.isAuthenticated())
 			return next();
 		else{
-			res.render('register.ejs')
+			res.render('register.ejs', { message: req.flash('signupMessage')})
 		}
 	}
 
@@ -79,7 +79,7 @@ module.exports = function(app, passport) {
 		if (req.isAuthenticated())
 			return next();
 		else{
-			res.render('register_seller.ejs')
+			res.render('register_seller.ejs', { message: req.flash('signupMessage')})
 		}
 	}
 
