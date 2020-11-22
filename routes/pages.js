@@ -4,7 +4,6 @@ module.exports = function(app, passport) {
 
 	//Home page
 	app.get('/', function(req, res) {
-		
 		let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
 		db.query(query, (err, row) => {
 			if(err)
@@ -179,16 +178,16 @@ module.exports = function(app, passport) {
 	//Restaurant page render
 	app.get("/restaurant/:id", (req, res) => {
 		// let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
-		let query = "SELECT * FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = 1) x NATURAL JOIN menu m";
-		db.query(query, (err, row) => {
-			console.log(row)
-			if(err)
-				console.log(err);
-			if(row.length) {
+		// let query = "SELECT * FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = 1) x NATURAL JOIN menu m";
+		// db.query(query, (err, row) => {
+		// 	console.log(row)
+		// 	if(err)
+		// 		console.log(err);
+		// 	if(row.length) {
 				res.render("restaurant.ejs", {menu: row, rest: row, status: false});
-			} else {
-				res.redirect('/')
-			}
-		});
+		// 	} else {
+		// 		res.redirect('/')
+		// 	}
+		// });
 	})
 };
