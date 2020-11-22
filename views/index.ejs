@@ -116,7 +116,7 @@
 <div style="height:30px;"></div>
 <section id="block" style="height:40px ;">
 	<div class="container">
-  		<h4><b>Favorites</b></h4> 
+  		<h4 class="display-4 text-center"><b>Restaurants</b></h4>
 	</div>
 </section>
 
@@ -136,9 +136,11 @@
 						<% let act = "/restaurant/" + rest[i]['id'] %>
 						<a href="<%= act %>">
 							<% let icon = "images/homeicons/" + rest[i]['id'] + ".jpg" %>
-						<img src="<%= icon %>" width="auto" height="auto" style="border-radius: 25px;" >
+							<img src="<%= icon %>" width="auto" height="auto" style="border-radius: 25px;" >
 					<% } else { %> 
 						<a href="/login">
+							<% let icon = "images/homeicons/" + rest[i]['id'] + ".jpg" %>
+							<img src="<%= icon %>" width="auto" height="auto" style="border-radius: 25px;" >
 					<% } %>
 					<p><%= rest[i]['name'] %></p>
 					<!-- <img src="images/subwaylogo.png" width="auto" height="100" style="border-radius: 25px;" > -->
@@ -226,7 +228,7 @@
 	<div style="height:30px;"></div>
 	<section id="block" style="height:60px;">
 		<div class="container">
-	  		<h4><b>Explore our collections</b></h4> 
+			<h4 class="display-4 text-center"><b>Explore our collections</b></h4>
 		</div>
 	</section>
 <!--Rest -->
