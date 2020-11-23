@@ -137,26 +137,33 @@ module.exports = function(app, passport) {
 			} else {
 				query = "SELECT i.id, name, price FROM (SELECT m.id FROM (SELECT s.id FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.user_id = ?) x INNER JOIN menu m ON m.rest_id = x.id) y INNER JOIN items i ON y.id = i.menu_id";
 				try {
-					let [rows, fields] = db.promise().query(query, [req.user.id]);
+					let [rows, fields] = await db.promise().query(query, [req.user.id]);
 					let menuItems = rows;
 					query = "SELECT id FROM seller WHERE user_id = ?";
-					[rows, fields] = db.promise().query(query, [req.user.id]);
-					let restId = rows[0].id;
-					query = "SELECT customer_id, total, quantity, name FROM (SELECT customer_id, total, item_id, quantity FROM (SELECT * FROM orders WHERE rest_id = ? AND status = ?) o INNER JOIN order_items ot ON o.id = ot.order_id) x INNER JOIN items i ON x.item_id = i.id";
-					[rows, fields] = db.promise().query(query, [restId, 0]); // Pending orders
-					let existingOrders = rows;
+					let [rows2, fields2] = await db.promise().query(query, [req.user.id]);
+					query = "SELECT order_id, total, item_id, i.name as item_name, quantity, a.name, address FROM (SELECT order_id, total, item_id, quantity, name, address FROM (SELECT y.order_id, total, item_id, quantity, user_id FROM (SELECT ot.order_id, customer_id, total, item_id, quantity FROM (SELECT * FROM orders WHERE rest_id = ? AND status = ?) o INNER JOIN order_items ot ON o.id = ot.order_id) y INNER JOIN customer c ON y.customer_id = c.id) z INNER JOIN users u ON u.id = z.user_id) a INNER JOIN items i ON a.item_id = i.id;"
+					let [rows3, fields3] = await db.promise().query(query, [rows2[0].id, 0]);
+					let existingOrders = rows3;
+					let final = [];
+					let orderArray = [];
+					for(var i = 0; i<existingOrders.length; i++) {
+						let orderId = existingOrders[i].order_id;
+						let k = [];
+						if(!orderArray.includes(orderId)) {
+							for(var j = 0; j<existingOrders.length; j++) {
+								if(orderId == existingOrders[j].order_id) {
+									k.push(existingOrders[j]);
+								}
+							}
+							final.push(k);
+							orderArray.push(orderId);
+						}
+					}
+					console.log(final);
+					res.render("profile.ejs", {user: req.user, isCustomer: false, status: false, existingMenuItems: menuItems, pendingOrders: final});
 				} catch(err) {
 					console.log(err);
 				}
-				db.query(query, [req.user.id], (err, row) => {
-					if(err)
-						console.log(err);
-					if(row.length) {
-						res.render("profile.ejs", {user: req.user, isCustomer: false, status: false, existingMenuItems: row});
-					}
-					else
-						res.render("profile.ejs", {user: req.user, isCustomer: false, status: false});
-				});
 			}
 		});
 	});
@@ -188,6 +195,17 @@ module.exports = function(app, passport) {
 			else
 				res.redirect("/profile");
 		})
+	});
+
+	app.get("/profile/sendorder/:id", isLoggedIn, async (req, res) => {
+		console.log(req.params.id);
+		let query = "UPDATE orders SET status = ? WHERE id = ?";
+		try {
+			let [rows, fields] = await db.promise().query(query, [1, req.params.id]);
+			res.redirect("/profile");
+		} catch(err) {
+			console.log(err);
+		}
 	});
 
 	function isLoggedIn(req, res, next) {
