@@ -30,13 +30,11 @@ module.exports = function(app, passport) {
 	}
 
 	app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/profile',
+            successRedirect : '/',
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true
 		}),
         function(req, res) {
-            console.log("hello");
-
             if (req.body.remember) {
               req.session.cookie.maxAge = 1000 * 60 * 3;
             } else {
@@ -65,7 +63,6 @@ module.exports = function(app, passport) {
 		// session: false,
 		failureFlash : true
 	}), (res,req) => {
-		console.log("success")
 	});
 
 
@@ -84,11 +81,10 @@ module.exports = function(app, passport) {
 	}
 
 	app.post('/register_seller', passport.authenticate('local-signup-seller', {
-		successRedirect : '/profile',
+		successRedirect : '/',
 		failureRedirect : '/register_seller', // redirect back to the signup page if there is an error
 		failureFlash : true
 	}), (res,req) => {
-		console.log("success")
 	});
 
 
@@ -106,7 +102,6 @@ module.exports = function(app, passport) {
 					if(err)
 						console.log(err);
 					if(row.length) {
-						console.log(row);
 						res.render("profile.ejs", {user: req.user, isCustomer: false, status: false, existingMenuItems: row});
 					}
 					else
@@ -127,7 +122,6 @@ module.exports = function(app, passport) {
 				console.log(err);
 			query = "INSERT INTO items (menu_id, name, summary, type, price) VALUES (?,?,?,?,?)";
 			db.query(query, [row[0].id, dishName, dishImg.name, "burger", dishPrice], (err, row) => {
-				console.log(row)
 				if(err)
 					console.log(err);
 				res.send({status: true});
@@ -183,7 +177,6 @@ module.exports = function(app, passport) {
 			if(err)
 				console.log(err);
 			else
-				console.log(row);
 			if(row.length) {
 				res.render("restaurant.ejs", {user: req.user, data: row, rest_id: restId});
 			} else {
@@ -191,4 +184,9 @@ module.exports = function(app, passport) {
 			}
 		});
 	});
+
+	app.post("/restaurant/:id/orders", isLoggedIn, (req, res) => {
+		let restId = req.params.id;
+		console.log(req.body)
+	})
 };
