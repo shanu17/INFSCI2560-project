@@ -239,7 +239,7 @@ module.exports = function(app, passport) {
 
 	//Restaurant page render
 	app.get("/restaurant/:id", isLoggedIn, (req, res) => {
-		let restId = req.params.id; 
+		let restId = req.params.id;
 		let query = "SELECT i.id, name, price, summary FROM (SELECT m.id FROM menu m INNER JOIN seller s ON s.id = m.rest_id WHERE s.id = ?) x INNER JOIN items i ON i.menu_id = x.id";
 		db.query(query, [restId], (err, row) => {
 			if(err)
