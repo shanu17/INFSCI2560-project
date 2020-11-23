@@ -75,6 +75,7 @@ module.exports = function(passport) {
 		function(req, email, password, done) {
 			//Check if user exists
 			// connection.connect();
+			
 			connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
 				if (err)
 					return done(err);

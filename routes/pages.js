@@ -6,7 +6,7 @@ module.exports = function(app, passport) {
 	app.get('/', function(req, res) {
 		let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
 		db.query(query, (err, row) => {
-			console.log(row[0]['id'])
+			
 			if(err)
 				console.log(err);
 			if(row.length) {
@@ -85,6 +85,7 @@ module.exports = function(app, passport) {
 	}
 
 	app.post('/register_seller', passport.authenticate('local-signup-seller', {
+		
 		successRedirect : '/profile',
 		failureRedirect : '/register_seller', // redirect back to the signup page if there is an error
 		failureFlash : true

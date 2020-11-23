@@ -80,7 +80,7 @@
 					<h1 style="color: black; text-align: center;" >Edit your Menu here</h1>
 					<% for(var i=0; i<existingMenuItems.length; i++) { %>
 						<div class="form-row">
-						<div class="form-group">
+						<div class="form-group" >
 						<% let act = "/profile/removeItems/" + existingMenuItems[i].id %>
 						<form action = <%= act%> method="GET" id = <%= existingMenuItems[i].id%>>
 							<div class="form-group">
