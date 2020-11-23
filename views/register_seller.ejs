@@ -53,6 +53,10 @@
 			  </div>
 		</nav>
 
+		<% if (message.length > 0) { %>
+			<div class="alert alert-danger text-center"><%= message %></div>
+		<% } %>
+		
 	<div class="registration-form">
 		<form action="/register_seller" method="POST">
 			<!-- <div>User Registeration</div> -->

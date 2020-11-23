@@ -6,10 +6,13 @@ module.exports = function(app, passport) {
 	app.get('/', function(req, res) {
 		let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
 		db.query(query, (err, row) => {
+<<<<<<< HEAD
 			
+=======
+>>>>>>> 76aba9da8d5be92ed50f121fc1886630dd0fb8db
 			if(err)
 				console.log(err);
-			if(row.length) {
+			if(row.length) { //If Seller
 				res.render("index.ejs", {user: req.user, rest: row, isCustomer: false, status: false});
 			} else {
 				res.render("index.ejs", {user: req.user, isCustomer: true, status: false})
@@ -26,7 +29,7 @@ module.exports = function(app, passport) {
 		if (req.isAuthenticated())
 			return next();
 		else{
-			res.render('login.ejs')
+			res.render('login.ejs', { message: req.flash('loginMessage')});
 		}
 	}
 
@@ -56,7 +59,7 @@ module.exports = function(app, passport) {
 		if (req.isAuthenticated())
 			return next();
 		else{
-			res.render('register.ejs')
+			res.render('register.ejs', { message: req.flash('signupMessage')})
 		}
 	}
 
@@ -80,7 +83,7 @@ module.exports = function(app, passport) {
 		if (req.isAuthenticated())
 			return next();
 		else{
-			res.render('register_seller.ejs')
+			res.render('register_seller.ejs', { message: req.flash('signupMessage')})
 		}
 	}
 
@@ -123,7 +126,7 @@ module.exports = function(app, passport) {
 		let dishName = req.body.dish1;
 		let dishPrice = req.body.dishprice1;
 		var query = "SELECT m.id FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = ?) x NATURAL JOIN menu m";
-		dishImg.mv("./uploads/" + dishImg.name);
+		dishImg.mv("./public/uploads/" + dishImg.name);
 		db.query(query, [req.user.id], (err, row) => {
 			if(err)
 				console.log(err);
@@ -178,18 +181,19 @@ module.exports = function(app, passport) {
 // 	});
 
 	//Restaurant page render
-	app.get("/restaurant/:id", (req, res) => {
-		// let query = "SELECT * FROM users u INNER JOIN seller s ON u.id=s.user_id";
-		let query = "SELECT * FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = 1) x NATURAL JOIN menu m";
-		db.query(query, (err, row) => {
-			console.log(row)
+	app.get("/restaurant/:id", isLoggedIn,(req, res) => {
+		let restId = req.params.id; 
+		let query = "SELECT i.id, name, price, summary FROM (SELECT m.id FROM menu m INNER JOIN seller s ON s.id = m.rest_id WHERE s.id = ?) x INNER JOIN items i ON i.menu_id = x.id";
+		db.query(query, [restId], (err, row) => {
 			if(err)
 				console.log(err);
+			else
+				console.log(row);
 			if(row.length) {
-				res.render("restaurant.ejs", {menu: row, rest: row, status: false});
+				res.render("restaurant.ejs", {user: req.user, data: row, rest_id: restId});
 			} else {
-				res.redirect('/')
+				res.redirect("/");
 			}
 		});
-	})
+	});
 };
