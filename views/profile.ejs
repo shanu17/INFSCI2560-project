@@ -80,35 +80,74 @@
 		<!-- Pending order -->
 
 		<div style="height:30px;"></div>
-		<div class="card">
-			  <!-- Card content -->
- 			 <div class="card-body">
 			<% if(isCustomer) { %>
 				<% if (typeof(pendingOrders) !="undefined" && pendingOrders.length > 0) {%>
-					<h3 style="color: black; text-align: left;" >Pending Orders</h3>
+					<!-- <h3 style="color: black; text-align: left;" >Pending Orders</h3>
 					<% for(var i=0; i<pendingOrders.length; i++) { %>
 						<div class="form-row">
 							<div class="form-group">
-								<hr class="hr">The order from <%= pendingOrders[i].rest_name %> with the total cost of <%= pendingOrders[i].total %> is pending
-
+								The order from <%= pendingOrders[i].rest_name %> with the total cost of <%= pendingOrders[i].total %> is pending
 							</div>
-						</div>
+						</div> -->
+						<div id="accordion">
+						  <div class="card">
+						    <div class="card-header" id="headingOne">
+						      <h5 class="mb-0">
+						        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						         <h3 style="color: black; text-align: left;" >Pending Orders</h3>
+						        </button>
+						      </h5>
+						    </div>
+
+						    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+						      <div class="card-body">
+						       <% for(var i=0; i<pendingOrders.length; i++) { %>
+								<div class="form-row">
+									<div class="form-group">
+										The order from <%= pendingOrders[i].rest_name %> with the total cost of <%= pendingOrders[i].total %> is pending
+									</div>
+								</div>
+							<% } %>
+						      </div>
+						    </div>
+						  </div>
+					
 					<% } %>
 				<% } %>
 				<% if (typeof(oldOrders) !="undefined" && oldOrders.length > 0) {%>
-					<h1 style="color: black; text-align: center;" >Previous Orders</h1>
-					<% for(var i=0; i<oldOrders.length; i++) { %>
-						<div class="form-row">
-							<div class="form-group">
-								The order from <%= oldOrders[i].rest_name %> with the total cost of <%= oldOrders[i].total %> has been delivered to you
+					
+					  <div class="card">
+						<div class="card-header" id="headingTwo">
+					      <h5 class="mb-0">
+					        <!-- <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> -->
+					     	<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					     	<h3 style="color: black; text-align: left;" >Previous Orders</h3>
+					        </button>
+					      </h5>
+					    </div>
+				       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+					      <div class="card-body">
+					       <% for(var i=0; i<oldOrders.length; i++) { %>
+							<div class="form-row">
+								<div class="form-group">
+									The order from <%= oldOrders[i].rest_name %> with the total cost of <%= oldOrders[i].total %> has been delivered to you
+								</div>
 							</div>
-						</div>
-					<% } %>
-				<% } %>
+							<% } %>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
 			<% } %>
+	<% } %>
+
+
+
+
 			<% if(!isCustomer){ %>
 				<% if (typeof(existingMenuItems) !="undefined") {%>
-					<h1 style="color: black; text-align: center;" >Edit your Menu here</h1>
+					<h3 style="color: black; text-align: center;" >Edit your Menu here</h3>
 					<% for(var i=0; i<existingMenuItems.length; i++) { %>
 						<div class="form-row">
 						<div class="form-group" >
@@ -124,7 +163,7 @@
 					<%} %>
 				<% } %>
 				<% if (typeof(pendingOrders) !="undefined" && pendingOrders.length > 0) {%>
-					<h1 style="color: black; text-align: center;" >Pending Orders</h1>
+					<h3 style="color: black; text-align: left;" > Pending Orders</h3>
 					<% for(var i=0; i<pendingOrders.length; i++) { %>
 						<% let act = "/profile/sendorder/" + pendingOrders[i][0].order_id%>
 						<form id = "sendOrder" method="GET" action=<%=act%>>
@@ -141,11 +180,11 @@
 						</div>
 					<% } %>
 				<% } %>	
-				<h1 style="color: black; text-align: center;" >Create your Menu here</h1>
+				<h3 style="color: black; text-align: left;" >Create your Menu here</h3>
 			<div class="form-row">
 				<form action="/register_seller" method="POST" id="menuItems" class="text-center">
 					<div class="row justify-content-center">
-						<h3 style="color: black; text-align: center">Please add the dishes with prices for your restaurant</h3>
+						<h4 style="color: black; text-align: left">Please add the dishes with prices for your restaurant</h4>
 						<div class="input-group col-sm-9">
 							<input type="text" class="form-control" id="dish1" name="dish1" placeholder="Dish #1">
 							<input type="text" class="form-control" id="dishprice1" name="dishprice1" placeholder="Price ($)">
@@ -163,8 +202,6 @@
 			</div>
 			<% } %>
 	</div>
-</div>
-</div>
 <div style="height:30px;"></div>
  <!-- Footer -->
     <footer id="footer">
