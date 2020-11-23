@@ -30,6 +30,7 @@ db.connect((err, result) => {
 		sql.push("CREATE TABLE orders (id INT AUTO_INCREMENT PRIMARY KEY, customer_id INT NOT NULL, rest_id INT NOT NULL, status BOOLEAN NOT NULL, total DECIMAL(7, 3) NOT NULL, CONSTRAINT fk_seller_id FOREIGN KEY (rest_id) REFERENCES seller (id) ON DELETE CASCADE, CONSTRAINT fk_customer_id FOREIGN KEY (customer_id) REFERENCES customer (id))");
 		sql.push("CREATE TABLE items (id INT AUTO_INCREMENT PRIMARY KEY, menu_id INT NOT NULL, name VARCHAR(255) NOT NULL, summary VARCHAR(255), type VARCHAR(255) NOT NULL, price DECIMAL(7, 3) NOT NULL, CONSTRAINT fk_menu_id FOREIGN KEY (menu_id) REFERENCES menu (id) ON DELETE CASCADE)");
 		sql.push("CREATE TABLE order_items (id INT AUTO_INCREMENT PRIMARY KEY, order_id INT NOT NULL, quantity INT NOT NULL, item_id INT NOT NULL, CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE, CONSTRAINT fk_item_id FOREIGN KEY (item_id) REFERENCES items (id))");
+		sql.push("CREATE TABLE rating (rest_id INT PRIMARY KEY, rate INT NOT NULL, CONSTRAINT fk_rating_id FOREIGN KEY (rest_id) REFERENCES seller (id) ON DELETE CASCADE)");
 		for (var i = 0; i < sql.length; i++) {
 			db.query(sql[i], (err, result) => {
 				if(err)

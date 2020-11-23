@@ -109,6 +109,11 @@ module.exports = function(passport) {
 									console.log(err);
 								}
 							});
+							insertQuery = "INSERT INTO rating(rest_id, rate) VALUES (?, ?)";
+							connection.query(insertQuery, [rows.insertId, 0], (err, rows) => {
+								if(err)
+									console.log(err);
+							});	
 						});
 						return done(null, newUserMysql1);
 					});
