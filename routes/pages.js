@@ -185,7 +185,7 @@ module.exports = function(app, passport) {
 			else
 				console.log(row);
 			if(row.length) {
-				res.render("restaurant.ejs", {user: req.user, data: row});
+				res.render("restaurant.ejs", {user: req.user, data: row, rest_id: restId});
 			} else {
 				res.redirect("/");
 			}

@@ -65,6 +65,9 @@
         </header>
         <section class="container content-section">
             <h2 class="section-header">Food Items</h2>
+            <% if (typeof(rest_id) !="undefined") {%>
+            <h5 id="rest_id" hidden><%= rest_id %></h5>
+            <% } %>
             <div class="shop-items">
                 <% for (var i = 0; i < data.length; i++) { %>
                 <div class="shop-item">
