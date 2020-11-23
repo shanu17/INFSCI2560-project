@@ -22,8 +22,9 @@ function ready() {
         var button = addToCartButtons[i]
         button.addEventListener('click', addToCartClicked)
     }
-
-    document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
+    
+    document.getElementById('purchase-form').addEventListener('submit', purchaseClicked)
+    // document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
 
 function purchaseClicked() {
@@ -45,6 +46,24 @@ function purchaseClicked() {
         items.push(item)
     }
     console.log(items)
+
+    var rid = document.getElementById('user_id')
+
+    var order_data = JSON.stringify(items);
+	var req = new XMLHttpRequest();
+	req.responseType = "json";
+	req.onreadystatechange = function() {
+		if(this.readyState == 4 && this.status == 200) {
+			if(this.response.status) {
+				console.log("success")
+			}
+		}
+    }
+    let url = "http://localhost:3000/restaurant/" + rid + "/orders";
+	req.open("POST", url, true);
+	req.send(order_data);
+
+
     while (cartItems.hasChildNodes()) {
         cartItems.removeChild(cartItems.firstChild)
     }

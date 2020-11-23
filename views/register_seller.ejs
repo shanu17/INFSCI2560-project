@@ -56,9 +56,9 @@
 		<% if (message.length > 0) { %>
 			<div class="alert alert-danger text-center"><%= message %></div>
 		<% } %>
-		
+
 	<div class="registration-form">
-		<form action="/register_seller" method="POST">
+		<form action="/register_seller" method="POST" oninput='passwordConfirm.setCustomValidity(passwordConfirm.value != password.value ? "Passwords do not match." : "")'>
 			<!-- <div>User Registeration</div> -->
 			<h1 class="display-4" style="color: black; text-align: center;" >Restaurant Registeration</h1>
             <div class="form-icon">
@@ -74,7 +74,7 @@
                 <input type="email" class="form-control item" id="email" name="email" placeholder="Email">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control item" id="password" name="password" placeholder="Password">
+                <input type="password" class="form-control item" minlength="8" id="password" name="password" placeholder="Password (8 characters minimum)">
 			</div>
 			<div class="form-group">
                 <input type="password" class="form-control item" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm Password">
