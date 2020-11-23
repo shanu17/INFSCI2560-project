@@ -51,35 +51,38 @@
 
 	<div class="container">
 		<div style="height:30px;"></div>
-		<div class="page-header text-center">
-			<h3><span class="fa fa-anchor"></span>&nbsp;<%= user.name %>'s Profile Page</h3>
-		</div>
-		<div id="alert"></div>
-		<ul class="list-group list-group-flush text-center">
-			<!-- <li class="list-group-item list-group-item-primary text-center"><%= user.name %></li> -->
-			<li class="list-group-item"><strong><span class="fa fa-envelope"></span>Email : </strong><%= user.email %></li>
-			<% if(isCustomer){ %>
-				<li class="list-group-item"><strong><span class="fa fa-user"></span>User name : </strong><%= user.name %></li>
-			<% } else { %>  
-				<li class="list-group-item"><strong><span class="fa fa-user"></span>Restaurant name : </strong><%= user.name %></li>
-			<% } %>
-			<li class="list-group-item"><strong><span class="fa fa-address-book"></span>Address : </strong><%= user.address %></li>
-			<li class="list-group-item"><button type="button" class="btn btn-danger" onclick="window.location='/logout';">Logout</button></li>
-		</ul>
-		  	
-		<!-- <div class="row">
-			<div class="col-sm-6">
-				<div class="well">
-					<h3><span class="fa fa-user"><%= user.name %></span></h3>
-						<p>
-							<strong>Email ID</strong>: <%= user.email %><br>
-							<strong>Name</strong>: <%= user.name %><br>
-							<strong>Address</strong>: <%= user.address %><br>
-						</p>
-				</div>
+		<!-- Account-->
+			<div class="card">
+			  <!-- image -->
+			 
+			  <img src="https://cdn1.iconfinder.com/data/icons/flat-business-icons/128/user-128.png" id="profilepic" width="10" height="150">
+			  <!-- Card content -->
+			  <div class="card-body">
+			    <!-- Title -->
+			    <h4 class="card-title"><a>Your Account</a></h4>
+			    <!-- Text -->
+			    <ul class="list-group list-group-flush">
+						<!-- <li class="list-group-item list-group-item-primary text-center"><%= user.name %></li> -->
+						<li class="list-group-item"><strong><span class="fa fa-envelope"></span>Email : </strong><%= user.email %></li>
+						<% if(isCustomer){ %>
+							<li class="list-group-item"><strong><span class="fa fa-user"></span>User name : </strong><%= user.name %></li>
+						<% } else { %>  
+							<li class="list-group-item"><strong><span class="fa fa-user"></span>Restaurant name : </strong><%= user.name %></li>
+						<% } %>
+						<li class="list-group-item"><strong><span class="fa fa-address-book"></span>Address : </strong><%= user.address %></li>
+						<li class="list-group-item"><button type="button" class="btn btn-danger" onclick="window.location='/logout';">Logout</button></li>
+					</ul>
+				    
+			    <!-- Button -->
+			  </div>
 			</div>
-		</div> -->
+		<!-- Account-->
+		<!-- Pending order -->
+
 		<div style="height:30px;"></div>
+		<div class="card">
+			  <!-- Card content -->
+ 			 <div class="card-body">
 			<% if(isCustomer) { %>
 				<% if (typeof(pendingOrders) !="undefined" && pendingOrders.length > 0) {%>
 					<h3 style="color: black; text-align: left;" >Pending Orders</h3>
@@ -141,7 +144,9 @@
 			</div>
 			<% } %>
 	</div>
-
+</div>
+</div>
+<div style="height:30px;"></div>
  <!-- Footer -->
     <footer id="footer">
         <!-- Container -->

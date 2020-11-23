@@ -120,7 +120,14 @@ body {
 }	
 
 
-
+#profilepic{
+ width: 120px;
+ height: 120px;
+ border-radius: 50%;
+ position: relative;
+ top: 10px;
+ left: calc( (180px - 120px) / 2 )
+}
 
 
 
