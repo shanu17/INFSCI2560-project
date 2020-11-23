@@ -128,7 +128,9 @@ body {
  top: 10px;
  left: calc( (180px - 120px) / 2 )
 }
-
+.hr{
+    margin-top: 0.2em;margin-bottom: 0.2em;border-style: inset;border-width: 1px;
+}
 
 
 @-webkit-keyframes object_big {
