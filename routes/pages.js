@@ -136,6 +136,18 @@ module.exports = function(app, passport) {
 				res.render("profile.ejs", {user: req.user, isCustomer: true, status: false, pendingOrders: pendingData, oldOrders: oldData});
 			} else {
 				query = "SELECT i.id, name, price FROM (SELECT m.id FROM (SELECT s.id FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.user_id = ?) x INNER JOIN menu m ON m.rest_id = x.id) y INNER JOIN items i ON y.id = i.menu_id";
+				try {
+					let [rows, fields] = db.promise().query(query, [req.user.id]);
+					let menuItems = rows;
+					query = "SELECT id FROM seller WHERE user_id = ?";
+					[rows, fields] = db.promise().query(query, [req.user.id]);
+					let restId = rows[0].id;
+					query = "SELECT customer_id, total, quantity, name FROM (SELECT customer_id, total, item_id, quantity FROM (SELECT * FROM orders WHERE rest_id = ? AND status = ?) o INNER JOIN order_items ot ON o.id = ot.order_id) x INNER JOIN items i ON x.item_id = i.id";
+					[rows, fields] = db.promise().query(query, [restId, 0]); // Pending orders
+					let existingOrders = rows;
+				} catch(err) {
+					console.log(err);
+				}
 				db.query(query, [req.user.id], (err, row) => {
 					if(err)
 						console.log(err);

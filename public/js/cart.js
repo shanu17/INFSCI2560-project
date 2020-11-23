@@ -53,12 +53,16 @@ document.getElementById('purchase-form').addEventListener('submit', (e) =>{
 	req.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 200) {
 			status = this.response.status;
+            alertOrders = document.getElementById("alertOrders");
             if(status) {
                 // Display something to tell the user their order has been placed
-                document.getElementById('purchase-form').reset();
+                alertOrders.innerHTML = "Your order has been placed";
             } else {
-                // Tell them that the order hasnt been placed
+                alertOrders.classList.remove("alert-success");
+                alertOrders.classList.add("alert-danger");
+                alertOrders.innerHTML = "Your order could not be placed please try again";
             }
+            document.getElementById('purchase-form').reset();
 		}
     }
     let url = "http://localhost:3000/restaurant/" + rid + "/orders";
