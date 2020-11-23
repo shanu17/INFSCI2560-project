@@ -185,9 +185,40 @@ module.exports = function(app, passport) {
 	});
 
 	// Restaurant order
-	app.get("/restaurant/:id/order", isLoggedIn, (req, res) => {
+	app.post("/restaurant/:id/orders", isLoggedIn, (req, res) => {
 		let restId = req.params.id;
-		let items = req.body.items;
-		
+		let items = req.body;
+		let userId = req.user.id;
+		let query = "SELECT c.id FROM users u INNER JOIN customer c ON c.user_id = u.id WHERE u.id=?";
+		db.query(query, [userId], (err, row) => {
+			if(err)
+				console.log(err);
+			let customerId = row[0].id;
+			query = "INSERT INTO orders (customer_id, rest_id, status, total) VALUES (?, ?, ?, ?)";
+			db.query(query, [customerId, restId, 0, items[items.length-1]], (err, row) => {
+				if(err)
+					console.log(err);
+				let orderId = row.insertId;
+				for(var i = 0; i < items.length - 1; i++) {
+					query = "SELECT id FROM items WHERE name=?";
+					let title = items[i].item_title;
+					let q = items[i].quantity;
+					console.log(title);
+					console.log(q);
+					db.query(query, [items[i].item_title], (err, row) => {
+						if(err)
+							console.log(err);
+						let itemId = row[0].id;
+						query = "INSERT INTO order_items (order_id, quantity, item_id) VALUES (?, ?, ?)";
+						db.query(query, [orderId, q, itemId], (err, row) => {
+							if(err)
+								console.log(err)
+							else
+								res.send({status: true});
+						})
+					});
+				}
+			});
+		});
 	});
 };

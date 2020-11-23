@@ -23,12 +23,11 @@ function ready() {
         button.addEventListener('click', addToCartClicked)
     }
     
-    document.getElementById('purchase-form').addEventListener('submit', purchaseClicked)
     // document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
 
-function purchaseClicked() {
-    alert('Thank you for your purchase')
+document.getElementById('purchase-form').addEventListener('submit', (e) =>{
+    e.preventDefault();
     var cartItems = document.getElementsByClassName('cart-items')[0]
     var cartItemContainer = document.getElementsByClassName('cart-items')[0]
     var cartRows = cartItemContainer.getElementsByClassName('cart-row')
@@ -45,13 +44,12 @@ function purchaseClicked() {
         let item = {"item_title": titleElement.innerHTML, "quantity": quantity}
         items.push(item)
     }
-    console.log(items)
 
-    var rid = document.getElementById('user_id')
-
+    let rid = document.getElementById('rest_id').innerText;
+    console.log(rid);
+    items.push(total);
     var order_data = JSON.stringify(items);
 	var req = new XMLHttpRequest();
-	req.responseType = "json";
 	req.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 200) {
 			if(this.response.status) {
@@ -61,14 +59,15 @@ function purchaseClicked() {
     }
     let url = "http://localhost:3000/restaurant/" + rid + "/orders";
 	req.open("POST", url, true);
+    req.setRequestHeader("Content-Type", "application/json");
+    console.log(order_data);
 	req.send(order_data);
-
 
     while (cartItems.hasChildNodes()) {
         cartItems.removeChild(cartItems.firstChild)
     }
     updateCartTotal()
-}
+})
 
 function removeCartItem(event) {
     var buttonClicked = event.target
