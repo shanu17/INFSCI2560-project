@@ -273,6 +273,7 @@ header{
     background: url(../images/header_bg.jpg)no-repeat;background-size: 100% 100%; 
     color: #c6b2b2;
     overflow: hidden;}
+    
 nav.navbar.bootsnav {
     background-color: #454646;
     border: 0 none;
@@ -764,8 +765,8 @@ address,.subscribe > p {
     width: 250px;
 }
 .form-control {
-    background-color: #454646;
-    border: 2px solid #646667;
+    /*background-color: #454646;*/
+    /*border: 2px solid #646667;*/
     border-radius: 5px;
     box-shadow: none;
     color: #c8c8c8;

@@ -127,6 +127,7 @@
 		    <div id="mdb-lightbox-ui"></div>
 			    <!--First slide-->
 			    <div class=" carousel-item active text-center">
+				<% if (typeof(rest) !="undefined") {%> 
 					<% for (var i = 0; i < rest.length; i++) { %>
 			      <figure class="col-md-2 d-md-inline-block">
 					<% if(user){ %>
@@ -144,6 +145,7 @@
 						</a>
 				  </figure>
 				  <% } %>
+				 <% } %>
 				</div>
 		  </div>
 		</div>
