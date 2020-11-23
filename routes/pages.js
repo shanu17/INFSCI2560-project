@@ -176,19 +176,24 @@ module.exports = function(app, passport) {
 // 	});
 
 	//Restaurant page render
-	app.get("/restaurant/:id", isLoggedIn,(req, res) => {
+	app.get("/restaurant/:id", isLoggedIn, (req, res) => {
 		let restId = req.params.id; 
 		let query = "SELECT i.id, name, price, summary FROM (SELECT m.id FROM menu m INNER JOIN seller s ON s.id = m.rest_id WHERE s.id = ?) x INNER JOIN items i ON i.menu_id = x.id";
 		db.query(query, [restId], (err, row) => {
 			if(err)
 				console.log(err);
-			else
-				console.log(row);
 			if(row.length) {
 				res.render("restaurant.ejs", {user: req.user, data: row, rest_id: restId});
 			} else {
 				res.redirect("/");
 			}
 		});
+	});
+
+	// Restaurant order
+	app.get("/restaurant/:id/order", isLoggedIn, (req, res) => {
+		let restId = req.params.id;
+		let items = req.body.items;
+		
 	});
 };
