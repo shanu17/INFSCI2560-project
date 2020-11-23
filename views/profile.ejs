@@ -122,6 +122,24 @@
 						</div>
 					<%} %>
 				<% } %>
+				<% if (typeof(pendingOrders) !="undefined" && pendingOrders.length > 0) {%>
+					<h1 style="color: black; text-align: center;" >Pending Orders</h1>
+					<% for(var i=0; i<pendingOrders.length; i++) { %>
+						<% let act = "/profile/sendorder/" + pendingOrders[i][0].order_id%>
+						<form id = "sendOrder" method="GET" action=<%=act%>>
+						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample<%= pendingOrders[i][0].order_id %>" aria-expanded="false" aria-controls= <%= pendingOrders[i][0].order_id%>>Order <%= pendingOrders[i][0].name%> Total: <%= pendingOrders[i][0].total%></button>
+						<div class="collapse" id="collapseExample<%= pendingOrders[i][0].order_id %>">
+						<div class="card card-body">
+						<p>Address: <%= pendingOrders[i][0].address%></p>
+						<% for(var j=0; j<pendingOrders[i].length; j++) { %>
+							<p><%= pendingOrders[i][j].item_name%> : <%= pendingOrders[i][j].quantity%></p>
+						<% } %>
+						<button class="btn btn-primary create-account" type="submit">Send Order</button>
+						</form>
+						</div>
+						</div>
+					<% } %>
+				<% } %>	
 				<h1 style="color: black; text-align: center;" >Create your Menu here</h1>
 			<div class="form-row">
 				<form action="/register_seller" method="POST" id="menuItems" class="text-center">
