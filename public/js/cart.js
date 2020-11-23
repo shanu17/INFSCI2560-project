@@ -52,9 +52,13 @@ document.getElementById('purchase-form').addEventListener('submit', (e) =>{
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 200) {
-			if(this.response.status) {
-				console.log("success")
-			}
+			status = this.response.status;
+            if(status) {
+                // Display something to tell the user their order has been placed
+                document.getElementById('purchase-form').reset();
+            } else {
+                // Tell them that the order hasnt been placed
+            }
 		}
     }
     let url = "http://localhost:3000/restaurant/" + rid + "/orders";

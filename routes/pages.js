@@ -1,4 +1,5 @@
 const db = require("../dbConnection");
+const util = require('util');
 
 module.exports = function(app, passport) {
 
@@ -90,14 +91,51 @@ module.exports = function(app, passport) {
 
 	//Profile
 	app.get('/profile', isLoggedIn, function(req, res) {
-		let query = "SELECT * FROM users u NATURAL JOIN customer c WHERE c.user_id = ?";
-		db.query(query, [req.user.id], (err, row) => {
+		let query = "SELECT c.id FROM users u INNER JOIN customer c ON u.id = c.user_id WHERE c.user_id = ?"; // checking if he is a customer
+		let pendingData = [];
+		let oldData = [];
+		db.query(query, [req.user.id], async (err, row) => {
 			if(err)
 				console.log(err);
 			if(row.length) {
-				res.render("profile.ejs", {user: req.user, isCustomer: true, status: true});
+				let customerId = row[0].id;
+				query = "SELECT rest_id, total FROM orders WHERE customer_id = ? AND status = ?";
+				try{
+					let [rows, fields] = await db.promise().query(query, [customerId, 0]);
+					let o = rows;
+					if(rows.length) {
+						for(var i = 0; i < rows.length; i++) {
+							let restId = o[i].rest_id
+							let total = o[i].total;
+							query = "SELECT name FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.id = ?";
+							let [rows, fields] = await db.promise().query(query, [restId]);
+							let order = {"rest_name": rows[0].name, "total": total};
+							pendingData.push(order);
+						}
+					}
+				} catch(err) {
+					console.log(err);
+				}
+				query = "SELECT rest_id, total FROM orders WHERE customer_id = ? AND status = ?";
+				try {
+					let [rows, fields] = await db.promise().query(query, [customerId, 1]);
+					let o = rows;
+					if(rows.length) {
+						for(var i = 0; i < rows.length; i++) {
+							let restId = o[i].rest_id
+							let total = o[i].total;
+							query = "SELECT name FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.id = ?";
+							let [rows, fields] = await db.promise().query(query, [restId]);
+							let order = {"rest_name": rows[0].name, "total": total};
+							oldData.push(order);
+						}
+					}
+				} catch(err) {
+					console.log(err);
+				}
+				res.render("profile.ejs", {user: req.user, isCustomer: true, status: false, pendingOrders: pendingData, oldOrders: oldData});
 			} else {
-				query = "SELECT i.id, name, price FROM (SELECT m.id FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = ?) x NATURAL JOIN menu m) x INNER JOIN items i ON x.id = i.menu_id";
+				query = "SELECT i.id, name, price FROM (SELECT m.id FROM (SELECT s.id FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.user_id = ?) x INNER JOIN menu m ON m.rest_id = x.id) y INNER JOIN items i ON y.id = i.menu_id";
 				db.query(query, [req.user.id], (err, row) => {
 					if(err)
 						console.log(err);
@@ -115,7 +153,7 @@ module.exports = function(app, passport) {
 		let dishImg = req.files.dishimg1;
 		let dishName = req.body.dish1;
 		let dishPrice = req.body.dishprice1;
-		var query = "SELECT m.id FROM (SELECT s.id FROM users u NATURAL JOIN seller s WHERE s.user_id = ?) x NATURAL JOIN menu m";
+		var query = "SELECT m.id FROM (SELECT s.id FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.user_id = ?) x INNER JOIN menu m ON m.rest_id = x.id";
 		dishImg.mv("./public/uploads/" + dishImg.name);
 		db.query(query, [req.user.id], (err, row) => {
 			if(err)

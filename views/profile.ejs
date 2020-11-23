@@ -75,7 +75,28 @@
 				</div>
 			</div>
 		</div> -->
-
+			<% if(isCustomer) { %>
+				<% if (typeof(pendingOrders) !="undefined" && pendingOrders.length > 0) {%>
+					<h1 style="color: black; text-align: center;" >Pending Orders</h1>
+					<% for(var i=0; i<pendingOrders.length; i++) { %>
+						<div class="form-row">
+							<div class="form-group">
+								The order from <%= pendingOrders[i].rest_name %> with the total cost of <%= pendingOrders[i].total %> is pending
+							</div>
+						</div>
+					<% } %>
+				<% } %>
+				<% if (typeof(oldOrders) !="undefined" && oldOrders.length > 0) {%>
+					<h1 style="color: black; text-align: center;" >Previous Orders</h1>
+					<% for(var i=0; i<oldOrders.length; i++) { %>
+						<div class="form-row">
+							<div class="form-group">
+								The order from <%= oldOrders[i].rest_name %> with the total cost of <%= oldOrders[i].total %> has been delivered to you
+							</div>
+						</div>
+					<% } %>
+				<% } %>
+			<% } %>
 			<% if(!isCustomer){ %>
 				<% if (typeof(existingMenuItems) !="undefined") {%>
 					<h1 style="color: black; text-align: center;" >Edit your Menu here</h1>
