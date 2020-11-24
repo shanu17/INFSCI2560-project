@@ -104,7 +104,7 @@
 						       <% for(var i=0; i<pendingOrders.length; i++) { %>
 								<div class="form-row">
 									<div class="form-group">
-										The order from <%= pendingOrders[i].rest_name %> with the total cost of <%= pendingOrders[i].total %> is pending
+										The order from <%= pendingOrders[i].rest_name %> with the total cost of $<%= pendingOrders[i].total %> is pending
 									</div>
 								</div>
 							<% } %>
@@ -130,7 +130,7 @@
 					       <% for(var i=0; i<oldOrders.length; i++) { %>
 							<div class="form-row">
 								<div class="form-group">
-									The order from <%= oldOrders[i].rest_name %> with the total cost of <%= oldOrders[i].total %> has been delivered to you
+									The order from <%= oldOrders[i].rest_name %> with the total cost of $<%= oldOrders[i].total %> has been delivered to you
 								</div>
 							</div>
 							<% } %>
@@ -148,26 +148,29 @@
 			<% if(!isCustomer){ %>
 				<% if (typeof(existingMenuItems) !="undefined") {%>
 					<h3 style="color: black; text-align: center;" >Edit your Menu here</h3>
+					<ul>
 					<% for(var i=0; i<existingMenuItems.length; i++) { %>
 						<div class="form-row">
 						<div class="form-group" >
 						<% let act = "/profile/removeItems/" + existingMenuItems[i].id %>
 						<form action = <%= act%> method="GET" id = <%= existingMenuItems[i].id%>>
-							<div class="form-group">
+							<li class="form-group">
 								<%= existingMenuItems[i].name %>
 								<button type="submit" class="btn btn-primary create-account">Delete Item</button>
-							</div>
+							</li>
 						</form>
 						</div>
 						</div>
 					<%} %>
+					</ul>
 				<% } %>
 				<% if (typeof(pendingOrders) !="undefined" && pendingOrders.length > 0) {%>
 					<h3 style="color: black; text-align: left;" > Pending Orders</h3>
 					<% for(var i=0; i<pendingOrders.length; i++) { %>
 						<% let act = "/profile/sendorder/" + pendingOrders[i][0].order_id%>
 						<form id = "sendOrder" method="GET" action=<%=act%>>
-						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample<%= pendingOrders[i][0].order_id %>" aria-expanded="false" aria-controls= <%= pendingOrders[i][0].order_id%>>Order <%= pendingOrders[i][0].name%> Total: <%= pendingOrders[i][0].total%></button>
+						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample<%= pendingOrders[i][0].order_id %>" aria-expanded="false" aria-controls= <%= pendingOrders[i][0].order_id%>>Order <%= pendingOrders[i][0].name%> Total: $<%= pendingOrders[i][0].total%></button>
+						<div style="height:30px;"></div>
 						<div class="collapse" id="collapseExample<%= pendingOrders[i][0].order_id %>">
 						<div class="card card-body">
 						<p>Address: <%= pendingOrders[i][0].address%></p>
@@ -179,6 +182,7 @@
 						</div>
 						</div>
 					<% } %>
+					<br />
 				<% } %>	
 				<h1 style="color: black; text-align: center;" >Create your Menu here</h1>
 				<div class = "row justify-content-md-center" id="alert"></div>
