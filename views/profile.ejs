@@ -80,6 +80,7 @@
 		<!-- Pending order -->
 
 		<div style="height:30px;"></div>
+
 			<% if(isCustomer) { %>
 				<% if (typeof(pendingOrders) !="undefined" && pendingOrders.length > 0) {%>
 					<!-- <h3 style="color: black; text-align: left;" >Pending Orders</h3>
@@ -207,6 +208,72 @@
 			</div>
 			<% } %>
 	</div>
+
+	<% if (typeof(isAdmin) !="undefined" && isAdmin) {%>
+		<div class="accordion" id="accordionExample">
+			<div class="card">
+				<div class="card-header" id="customerHeading">
+					<h2 class="mb-0">
+					<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#customerData" aria-expanded="true" aria-controls="customerData">Customers</button>
+					</h2>
+				</div>
+				<div id="customerData" class="collapse show" aria-labelledby="customerHeading" data-parent="#accordionExample">
+					<div class="card-body">
+						<table style="width:100%">
+							<tr>
+								<th>Customer Name</th>
+								<th>Customer Email</th>
+								<th>Customer Address</th>
+								<th>Action</th>
+							</tr>
+							<% for(var i=0; i<customer.length; i++) { %>
+								<% let act = "/profile/delUser/" + customer[i].id%>
+								<tr>
+									<td><%= customer[i].name%></td>
+									<td><%= customer[i].email%></td>
+									<td><%= customer[i].address%></td>
+									<td><form action=<%= act%> method="GET"><button type="submit" class="btn btn-danger">Delete Customer</button></form></td>
+								</tr>
+							<% } %>
+						</table>
+					</div>
+				</div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-header" id="sellerHeading">
+					<h2 class="mb-0">
+					<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#sellerData" aria-expanded="true" aria-controls="sellerData">Restaurants</button>
+					</h2>
+				</div>
+				<div id="sellerData" class="collapse show" aria-labelledby="sellerHeading" data-parent="#accordionExample">
+					<div class="card-body">
+						<table style="width:100%">
+							<tr>
+								<th>Restaurant Name</th>
+								<th>Restaurant Email</th>
+								<th>Restaurant Address</th>
+								<th>Restaurant Category</th>
+								<th>Action</th>
+							</tr>
+							<% for(var i=0; i<seller.length; i++) { %>
+								<% let act = "/profile/delUser/" + seller[i].id%>
+								<tr>
+									<td><%= seller[i].name%></td>
+									<td><%= seller[i].email%></td>
+									<td><%= seller[i].address%></td>
+									<td><%= seller[i].category%></td>
+									<td><form action=<%= act%> method="GET"><button type="submit" class="btn btn-danger">Delete Restaurant</button></form></td>
+								</tr>
+							<% } %>
+						</table>
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+	<% } %>
+
 <div style="height:30px;"></div>
  <!-- Footer -->
     <footer id="footer">

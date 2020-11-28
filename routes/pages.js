@@ -90,82 +90,93 @@ module.exports = function(app, passport) {
 
 
 	//Profile
-	app.get('/profile', isLoggedIn, function(req, res) {
+	app.get('/profile', isLoggedIn, async function(req, res) {
 		let query = "SELECT c.id FROM users u INNER JOIN customer c ON u.id = c.user_id WHERE c.user_id = ?"; // checking if he is a customer
 		let pendingData = [];
 		let oldData = [];
-		db.query(query, [req.user.id], async (err, row) => {
-			if(err)
-				console.log(err);
-			if(row.length) {
-				let customerId = row[0].id;
-				query = "SELECT rest_id, total FROM orders WHERE customer_id = ? AND status = ?";
-				try{
-					let [rows, fields] = await db.promise().query(query, [customerId, 0]);
-					let o = rows;
-					if(rows.length) {
-						for(var i = 0; i < rows.length; i++) {
-							let restId = o[i].rest_id
-							let total = o[i].total;
-							query = "SELECT name FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.id = ?";
-							let [rows, fields] = await db.promise().query(query, [restId]);
-							let order = {"rest_name": rows[0].name, "total": total};
-							pendingData.push(order);
-						}
-					}
-				} catch(err) {
+		console.log(req.user.name);
+		if(req.user.name !== "admin") {
+			db.query(query, [req.user.id], async (err, row) => {
+				if(err)
 					console.log(err);
-				}
-				query = "SELECT rest_id, total FROM orders WHERE customer_id = ? AND status = ?";
-				try {
-					let [rows, fields] = await db.promise().query(query, [customerId, 1]);
-					let o = rows;
-					if(rows.length) {
-						for(var i = 0; i < rows.length; i++) {
-							let restId = o[i].rest_id
-							let total = o[i].total;
-							query = "SELECT name FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.id = ?";
-							let [rows, fields] = await db.promise().query(query, [restId]);
-							let order = {"rest_name": rows[0].name, "total": total};
-							oldData.push(order);
-						}
-					}
-				} catch(err) {
-					console.log(err);
-				}
-				res.render("profile.ejs", {user: req.user, isCustomer: true, status: false, pendingOrders: pendingData, oldOrders: oldData});
-			} else {
-				query = "SELECT i.id, name, price FROM (SELECT m.id FROM (SELECT s.id FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.user_id = ?) x INNER JOIN menu m ON m.rest_id = x.id) y INNER JOIN items i ON y.id = i.menu_id";
-				try {
-					let [rows, fields] = await db.promise().query(query, [req.user.id]);
-					let menuItems = rows;
-					query = "SELECT id FROM seller WHERE user_id = ?";
-					let [rows2, fields2] = await db.promise().query(query, [req.user.id]);
-					query = "SELECT order_id, total, item_id, i.name as item_name, quantity, a.name, address FROM (SELECT order_id, total, item_id, quantity, name, address FROM (SELECT y.order_id, total, item_id, quantity, user_id FROM (SELECT ot.order_id, customer_id, total, item_id, quantity FROM (SELECT * FROM orders WHERE rest_id = ? AND status = ?) o INNER JOIN order_items ot ON o.id = ot.order_id) y INNER JOIN customer c ON y.customer_id = c.id) z INNER JOIN users u ON u.id = z.user_id) a INNER JOIN items i ON a.item_id = i.id;"
-					let [rows3, fields3] = await db.promise().query(query, [rows2[0].id, 0]);
-					let existingOrders = rows3;
-					let final = [];
-					let orderArray = [];
-					for(var i = 0; i<existingOrders.length; i++) {
-						let orderId = existingOrders[i].order_id;
-						let k = [];
-						if(!orderArray.includes(orderId)) {
-							for(var j = 0; j<existingOrders.length; j++) {
-								if(orderId == existingOrders[j].order_id) {
-									k.push(existingOrders[j]);
-								}
+				if(row.length) {
+					let customerId = row[0].id;
+					query = "SELECT rest_id, total FROM orders WHERE customer_id = ? AND status = ?";
+					try{
+						let [rows, fields] = await db.promise().query(query, [customerId, 0]);
+						let o = rows;
+						if(rows.length) {
+							for(var i = 0; i < rows.length; i++) {
+								let restId = o[i].rest_id
+								let total = o[i].total;
+								query = "SELECT name FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.id = ?";
+								let [rows, fields] = await db.promise().query(query, [restId]);
+								let order = {"rest_name": rows[0].name, "total": total};
+								pendingData.push(order);
 							}
-							final.push(k);
-							orderArray.push(orderId);
 						}
+					} catch(err) {
+						console.log(err);
 					}
-					console.log(final);
-					res.render("profile.ejs", {user: req.user, isCustomer: false, status: false, existingMenuItems: menuItems, pendingOrders: final});
-				} catch(err) {
-					console.log(err);
+					query = "SELECT rest_id, total FROM orders WHERE customer_id = ? AND status = ?";
+					try {
+						let [rows, fields] = await db.promise().query(query, [customerId, 1]);
+						let o = rows;
+						if(rows.length) {
+							for(var i = 0; i < rows.length; i++) {
+								let restId = o[i].rest_id
+								let total = o[i].total;
+								query = "SELECT name FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.id = ?";
+								let [rows, fields] = await db.promise().query(query, [restId]);
+								let order = {"rest_name": rows[0].name, "total": total};
+								oldData.push(order);
+							}
+						}
+					} catch(err) {
+						console.log(err);
+					}
+					res.render("profile.ejs", {user: req.user, isCustomer: true, status: false, pendingOrders: pendingData, oldOrders: oldData});
+				} else {
+					query = "SELECT i.id, name, price FROM (SELECT m.id FROM (SELECT s.id FROM users u INNER JOIN seller s ON u.id = s.user_id WHERE s.user_id = ?) x INNER JOIN menu m ON m.rest_id = x.id) y INNER JOIN items i ON y.id = i.menu_id";
+					try {
+						let [rows, fields] = await db.promise().query(query, [req.user.id]);
+						let menuItems = rows;
+						query = "SELECT id FROM seller WHERE user_id = ?";
+						let [rows2, fields2] = await db.promise().query(query, [req.user.id]);
+						query = "SELECT order_id, total, item_id, i.name as item_name, quantity, a.name, address FROM (SELECT order_id, total, item_id, quantity, name, address FROM (SELECT y.order_id, total, item_id, quantity, user_id FROM (SELECT ot.order_id, customer_id, total, item_id, quantity FROM (SELECT * FROM orders WHERE rest_id = ? AND status = ?) o INNER JOIN order_items ot ON o.id = ot.order_id) y INNER JOIN customer c ON y.customer_id = c.id) z INNER JOIN users u ON u.id = z.user_id) a INNER JOIN items i ON a.item_id = i.id;"
+						let [rows3, fields3] = await db.promise().query(query, [rows2[0].id, 0]);
+						let existingOrders = rows3;
+						let final = [];
+						let orderArray = [];
+						for(var i = 0; i<existingOrders.length; i++) {
+							let orderId = existingOrders[i].order_id;
+							let k = [];
+							if(!orderArray.includes(orderId)) {
+								for(var j = 0; j<existingOrders.length; j++) {
+									if(orderId == existingOrders[j].order_id) {
+										k.push(existingOrders[j]);
+									}
+								}
+								final.push(k);
+								orderArray.push(orderId);
+							}
+						}
+						console.log(final);
+						res.render("profile.ejs", {user: req.user, isCustomer: false, status: false, existingMenuItems: menuItems, pendingOrders: final});
+					} catch(err) {
+						console.log(err);
+					}
 				}
-			}
-		});
+			});
+		} else {
+			query = "SELECT u.id, u.name, u.email, u.address FROM users u INNER JOIN customer c ON c.user_id = u.id WHERE u.name <> ?"
+			let [rows, fields] = await db.promise().query(query, ["admin"]);
+			let customerData = rows;
+			query = "SELECT u.id, u.name, u.email, u.address, s.category FROM users u INNER JOIN seller s ON s.user_id = u.id";
+			[rows, fields] = await db.promise().query(query);
+			let sellerData = rows;
+			res.render("profile.ejs", {user: req.user, isCustomer: true, status: false, isAdmin: true, customer: customerData, seller: sellerData});
+		}
 	});
 
 	app.post("/profile/addItem", isLoggedIn, (req, res) => {
@@ -202,6 +213,17 @@ module.exports = function(app, passport) {
 		let query = "UPDATE orders SET status = ? WHERE id = ?";
 		try {
 			let [rows, fields] = await db.promise().query(query, [1, req.params.id]);
+			res.redirect("/profile");
+		} catch(err) {
+			console.log(err);
+		}
+	});
+
+	app.get("/profile/delUser/:id", isLoggedIn, async (req, res) => {
+		let userId = req.params.id;
+		let query = "DELETE FROM users WHERE id=?";
+		try {
+			let [rows, fields] = await db.promise().query(query, [userId]);
 			res.redirect("/profile");
 		} catch(err) {
 			console.log(err);
