@@ -161,8 +161,9 @@ module.exports = function(app, passport) {
 								orderArray.push(orderId);
 							}
 						}
-						console.log(final);
-						res.render("profile.ejs", {user: req.user, isCustomer: false, status: false, existingMenuItems: menuItems, pendingOrders: final});
+						query = "SELECT SUM(total) AS earning FROM orders WHERE status = ? AND rest_id = ?"
+						let [rows4, fields4] = await db.promise().query(query, [rows2[0].id, 1]);
+						res.render("profile.ejs", {user: req.user, isCustomer: false, status: false, existingMenuItems: menuItems, pendingOrders: final, total: rows4[0].earning});
 					} catch(err) {
 						console.log(err);
 					}

@@ -68,6 +68,9 @@
 							<li class="list-group-item"><strong><span class="fa fa-user"></span>User name : </strong><%= user.name %></li>
 						<% } else { %>  
 							<li class="list-group-item"><strong><span class="fa fa-user"></span>Restaurant name : </strong><%= user.name %></li>
+							<% if (typeof(total) !="undefined") {%>
+							<li class="list-group-item"><strong><span class="fa fa-dollar-sign"></span>Total earnings : </strong>$ <%= total %></li>
+							<% } %>
 						<% } %>
 						<li class="list-group-item"><strong><span class="fa fa-address-book"></span>Address : </strong><%= user.address %></li>
 						<li class="list-group-item"><button type="button" class="btn btn-danger" onclick="window.location='/logout';">Logout</button></li>
