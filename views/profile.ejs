@@ -102,7 +102,6 @@
 						        </button>
 						      </h5>
 						    </div>
-
 						    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 						      <div class="card-body">
 						       <% for(var i=0; i<pendingOrders.length; i++) { %>
@@ -145,71 +144,102 @@
 				</div>
 			<% } %>
 	<% } %>
+	<% if(!isCustomer){ %>
+		<% if (typeof(existingMenuItems) !="undefined") {%>
+		    <div class="container">
+				<div style="height:30px;"></div>
+				<!-- Account-->
+					<div class="card">				  
+					  <!-- Card content -->
+					  <div class="card-body">
+					    <!-- Title -->
 
+					    <h4 class="card-title" style="color: black; "><a>Edit your Menu here</a></h4> <hr>
+					    <!-- Text -->
+					    <div style="height:20px;"></div>
+					  	 <ul  style="list-style-type: lower-roman;" >
+							<% for(var i=0; i<existingMenuItems.length; i++) { %>
+								<div class="form-row">
+								<div class="form-group" >
+								<% let act = "/profile/removeItems/" + existingMenuItems[i].id %>
+								<form action = <%= act%> method="GET" id = <%= existingMenuItems[i].id%>>
+									<li class="form-group" >
+										<%= existingMenuItems[i].name %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<button type="submit" class="btn btn-primary create-account">Delete Item</button>
+									
+									</li>
+								</form>
 
+								</div>
+								</div>
 
+							<%} %>
+							</ul>
 
-			<% if(!isCustomer){ %>
-				<% if (typeof(existingMenuItems) !="undefined") {%>
-					<h3 style="color: black; text-align: center;" >Edit your Menu here</h3>
-					<ul>
-					<% for(var i=0; i<existingMenuItems.length; i++) { %>
-						<div class="form-row">
-						<div class="form-group" >
-						<% let act = "/profile/removeItems/" + existingMenuItems[i].id %>
-						<form action = <%= act%> method="GET" id = <%= existingMenuItems[i].id%>>
-							<li class="form-group">
-								<%= existingMenuItems[i].name %>
-								<button type="submit" class="btn btn-primary create-account">Delete Item</button>
-							</li>
-						</form>
-						</div>
-						</div>
-					<%} %>
-					</ul>
+					 </div>
+					</div>
+				</div>
 				<% } %>
 				<% if (typeof(pendingOrders) !="undefined" && pendingOrders.length > 0) {%>
-					<h3 style="color: black; text-align: left;" > Pending Orders</h3>
-					<% for(var i=0; i<pendingOrders.length; i++) { %>
-						<% let act = "/profile/sendorder/" + pendingOrders[i][0].order_id%>
-						<form id = "sendOrder" method="GET" action=<%=act%>>
-						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample<%= pendingOrders[i][0].order_id %>" aria-expanded="false" aria-controls= <%= pendingOrders[i][0].order_id%>>Order <%= pendingOrders[i][0].name%> Total: $<%= pendingOrders[i][0].total%></button>
-						<div style="height:30px;"></div>
-						<div class="collapse" id="collapseExample<%= pendingOrders[i][0].order_id %>">
-						<div class="card card-body">
-						<p>Address: <%= pendingOrders[i][0].address%></p>
-						<% for(var j=0; j<pendingOrders[i].length; j++) { %>
-							<p><%= pendingOrders[i][j].item_name%> : <%= pendingOrders[i][j].quantity%></p>
-						<% } %>
-						<button class="btn btn-primary create-account" type="submit">Send Order</button>
-						</form>
-						</div>
-						</div>
-					<% } %>
-					<br />
-				<% } %>	
-				<h1 style="color: black; text-align: center;" >Create your Menu here</h1>
-				<div class = "row justify-content-md-center" id="alert"></div>
-			<div class="form-row">
-				<form action="/register_seller" method="POST" id="menuItems" class="text-center">
-					<div class="row justify-content-center">
-						<h4 style="color: black; text-align: left">Please add the dishes with prices for your restaurant</h4>
-						<div class="input-group col-sm-9">
-							<input type="text" class="form-control" id="dish1" name="dish1" placeholder="Dish #1">
-							<input type="text" class="form-control" id="dishprice1" name="dishprice1" placeholder="Price ($)">
-						</div>
-						<div class="form-group">
-							<!-- <label for="exampleFormControlFile1">Dish 1 Image</label> -->
-							<!-- <p>Dish image</p> -->
-							<input type="file" class="form-control-file" id="dishimg1" name="dishimg1">
-						</div>
-					</div>
-					<div class="form-group">
-						<button type="submit" class="btn btn-primary create-account">Add Item</button>
-					</div>
-				</form>
-			</div>
-			<% } %>
+					
+					<div class="container">
+									<div style="height:30px;"></div>
+									<!-- Account-->
+										<div class="card">				  
+										  <!-- Card content -->
+										  <div class="card-body">								    
+										    <!-- Text -->
+											 <h3 style="color: black; text-align: left;" > Pending Orders</h3><hr>
+											 <div style="height:30px;"></div>
+
+												<% for(var i=0; i<pendingOrders.length; i++) { %>
+													<% let act = "/profile/sendorder/" + pendingOrders[i][0].order_id%>
+														<form id = "sendOrder" method="GET" action=<%=act%>>&#10065;
+															<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample<%= pendingOrders[i][0].order_id %>" aria-expanded="false" aria-controls= <%= pendingOrders[i][0].order_id%>>Order <%= pendingOrders[i][0].name%> Total: $<%= pendingOrders[i][0].total%></button>
+																<div style="height:30px;"></div>
+																	<div class="collapse" id="collapseExample<%= pendingOrders[i][0].order_id %>">
+																		<div class="card card-body">
+																			<p>Address: <%= pendingOrders[i][0].address%></p>
+																			<% for(var j=0; j<pendingOrders[i].length; j++) { %>
+																				<p><%= pendingOrders[i][j].item_name%> : <%= pendingOrders[i][j].quantity%></p>
+																			<% } %>
+																<button class="btn btn-primary create-account" type="submit">Send Order</button>
+														</form>
+													</div>
+													</div>
+												<% } %>
+												<br />
+											<% } %>	
+
+
+
+											<h3 style="color: black; text-align: left;"  >Create your Menu here</h3><hr>
+											<div class = "row justify-content-md-center" id="alert"></div>
+											<div class="form-row">
+												<form action="/register_seller" method="POST" id="menuItems" class="text-center">
+													<div class="row justify-content-center">
+														<h5 style="color: black; text-align: left">Please add the dishes with prices for your restaurant</h5>
+														<div class="input-group col-sm-9">
+															<input type="text" class="form-control" id="dish1" name="dish1" placeholder="Dish #1">
+															<input type="text" class="form-control" id="dishprice1" name="dishprice1" placeholder="Price ($)">
+														</div>
+														 <div style="height:30px;"></div>
+														<div class="form-group">
+															<!-- <label for="exampleFormControlFile1">Dish 1 Image</label> -->
+															<!-- <p>Dish image</p> -->
+															<input type="file" class="form-control-file" id="dishimg1" name="dishimg1">
+														</div>
+													</div>
+													<div class="form-group">
+														<button type="submit" class="btn btn-primary create-account">Add Item</button>
+													</div>
+												</form>
+											</div>
+										<% } %>
+
+									 </div>
+								</div>
+							</div>				
 	</div>
 
 	<% if (typeof(isAdmin) !="undefined" && isAdmin) {%>
