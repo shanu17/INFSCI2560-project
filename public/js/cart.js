@@ -55,8 +55,8 @@ document.getElementById('purchase-form').addEventListener('submit', (e) =>{
 			status = this.response.status;
             alertOrders = document.getElementById("alertOrders");
             if(status) {
-                // Display something to tell the user their order has been placed
                 alertOrders.innerHTML = "Your order has been placed";
+
             } else {
                 alertOrders.classList.remove("alert-success");
                 alertOrders.classList.add("alert-danger");

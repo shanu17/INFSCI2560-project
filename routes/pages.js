@@ -305,7 +305,7 @@ module.exports = function(app, passport) {
 							if(err)
 								console.log(err)
 							else
-								res.send({status: true});
+								return res.send({status: true});
 						})
 					});
 				}
