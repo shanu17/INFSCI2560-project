@@ -55,3 +55,6 @@ npm start
 This will start the server and you can access the website by opening your browser and going to the URL - localhost:3000 <br/>
 
 Please start by creating a few users and few restaurants with more than 1 menu item to order
+
+## Admin Privilege:
+To access admin functionality create a user with the name as "admin" and email ID as "admin@pitt.edu", the rest of the information needed to create an user is arbitrary.
